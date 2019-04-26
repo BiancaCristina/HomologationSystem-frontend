@@ -2,9 +2,9 @@ import React from 'react'
 export default props => (
 <header className='main-header'>
     <a href='/#/' className='logo'>
-        <span className='logo-mini'><b>My</b>M</span>
+        <span className='logo-mini'><b>CEI</b></span>
         <span className='logo-lg'>
-            Centro de Entregas e Inovação
+            CEI
         </span>
     </a>
 

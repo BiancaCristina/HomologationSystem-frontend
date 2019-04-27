@@ -4,7 +4,7 @@ class TabHeader extends Component {
     render() {
         return (
         <li>
-            <a href
+            <a href='javascript:;'
                 data-toggle='tab'
                 data-target={this.props.target}>
                 <i className={`fa fa-${this.props.icon}`}></i>

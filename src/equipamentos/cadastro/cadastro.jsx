@@ -9,13 +9,16 @@ import TabsHeader from '../../common/tab/tabsHeader'
 import TabsContent from '../../common/tab/tabsContent'
 import TabHeader from '../../common/tab/tabHeader'
 import TabContent from '../../common/tab/tabContent'
-import { selectTab } from '../../common/tab/tabActions'
+import { selectTab, showTabs } from '../../common/tab/tabActions'
 
 class Cadastro extends Component {
 
 	componentWillMount() {
-		// Faz com que a aba padrão seja a 'tabCreate' de criar equipamentos
+		// Faz com que a tab padrão seja a 'tabCreate' de criar equipamentos
 		this.props.selectTab('tabCreate')
+
+		// Define visibilidade de determinadas tabs
+		this.props.showTabs('tabCreate')
 	}
 
 	render() {
@@ -53,5 +56,5 @@ class Cadastro extends Component {
 	}
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({selectTab}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({selectTab, showTabs}, dispatch)
 export default connect(null, mapDispatchToProps)(Cadastro)

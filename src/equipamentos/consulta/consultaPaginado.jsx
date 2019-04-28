@@ -1,7 +1,17 @@
 import React, {Component} from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { getList } from './consultaActions'
 
 class ConsultaPaginado extends Component {
+
+    componentWillMount() {
+        this.props.getList()
+    }
+
     render() {
+        console.log(this.props.getList())
+        
         return (
             <div>
                 <table className='table'>
@@ -25,4 +35,6 @@ class ConsultaPaginado extends Component {
     }
 }
 
-export default ConsultaPaginado
+const mapStateToProps = state => ({list: state.consulta.list})
+const mapDispatchToProps = dispatch => bindActionCreators({getList}, dispatch)
+export default connect(mapStateToProps, mapDispatchToProps)(ConsultaPaginado)

@@ -10,6 +10,7 @@ import TabsContent from '../../common/tab/tabsContent'
 import TabHeader from '../../common/tab/tabHeader'
 import TabContent from '../../common/tab/tabContent'
 import { selectTab, showTabs } from '../../common/tab/tabActions'
+import EquipamentosPaginados from './consultaPaginado'
 
 class Consulta extends Component {
 
@@ -35,7 +36,7 @@ class Consulta extends Component {
 
 					<TabsContent>
 						<TabContent id='tabList'>
-							<h1>Listar Equipamentos</h1>
+							<EquipamentosPaginados />
 						</TabContent>
 					</TabsContent>
 				</Tabs>

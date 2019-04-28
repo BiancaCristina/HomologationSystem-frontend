@@ -11,6 +11,8 @@ import TabHeader from '../../common/tab/tabHeader'
 import TabContent from '../../common/tab/tabContent'
 import { selectTab, showTabs } from '../../common/tab/tabActions'
 
+import Form from './cadastroForm'
+
 class Cadastro extends Component {
 
 	componentWillMount() {
@@ -37,7 +39,7 @@ class Cadastro extends Component {
 
 					<TabsContent>
 						<TabContent id='tabCreate'>
-							<h1>Adicionar Equipamento</h1>
+							<Form />
 						</TabContent>
 
 						<TabContent id='tabUpdate'>

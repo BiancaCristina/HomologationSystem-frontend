@@ -10,6 +10,7 @@ import TabsContent from '../../common/tab/tabsContent'
 import TabHeader from '../../common/tab/tabHeader'
 import TabContent from '../../common/tab/tabContent'
 import { selectTab, showTabs } from '../../common/tab/tabActions'
+import {create} from './cadastroActions'
 
 import Form from './cadastroForm'
 
@@ -39,7 +40,7 @@ class Cadastro extends Component {
 
 					<TabsContent>
 						<TabContent id='tabCreate'>
-							<Form />
+							<Form onSubmit= {this.props.create}/>
 						</TabContent>
 
 						<TabContent id='tabUpdate'>
@@ -58,5 +59,5 @@ class Cadastro extends Component {
 	}
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({selectTab, showTabs}, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({selectTab, showTabs, create}, dispatch)
 export default connect(null, mapDispatchToProps)(Cadastro)

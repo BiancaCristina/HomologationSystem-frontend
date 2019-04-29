@@ -2,42 +2,49 @@ import React, { Component } from 'react'
 import { reduxForm, Field } from 'redux-form'
 
 class CadastroForm extends Component {
-  render() {
-    return (
-        <form role='form'>
-            <div className='box-body'>
-                <Field name="R12" component="input" type="text" placeholder="R12"/>
-            </div>
-
-            <div className='box-body'>
-                <Field name="Nome" component="input" type="text" placeholder="Nome"/>
-            </div>
-
-            <div className='box-body'>
-                <Field name="Fabricante" component="input" type="text" placeholder="Fabricante"/>
-            </div>
-
-            <div className='box-body'>
-                <Field name="Descricao" component="input" type="text" placeholder="Descrição"/>
-            </div>
-
-            <div>
-                <label></label>
-                <div>
-                    <Field name="favoriteColor" component="select">
-                        <option></option>
-                        <option value="EM ANDAMENTO">Em andamento</option>
-                        <option value="APROVADO">Aprovado</option>
-                        <option value="REPROVADO">Reprovado</option>
-                    </Field>
+    render() {
+        const { handleSubmit } = this.props
+        return (    
+            <form role='form' onSubmit= {handleSubmit}>
+                <div className='box-body'>
+                    <Field name="r12" component="input" type="text" placeholder="R12"/>
                 </div>
-            </div>
 
-            <div className='box-footer'>
-                <button type='submit' className='btn btn-primary'
-                >Cadastrar</button>
-            </div>
-        </form>
+                <div className='box-body'>
+                    <Field name="nome" component="input" type="text" placeholder="Nome"/>
+                </div>
+
+                <div className='box-body'>
+                    <Field name="fabricante" component="input" type="text" placeholder="Fabricante"/>
+                </div>
+
+                <div className='box-body'>
+                    <Field name="descricao" component="input" type="textarea" placeholder="Descrição"/>
+                </div>
+               
+{/*                 <div>
+                    <div>
+                        <Field name="descricao" component="textarea" rows="5"/>
+                    </div>
+                </div> */}
+
+                <div>
+                    <label></label>
+                    <div>
+                        <Field name="status" component="select">
+                            <option></option>
+                            <option value="EM ANDAMENTO">Em andamento</option>
+                            <option value="APROVADO">Aprovado</option>
+                            <option value="REPROVADO">Reprovado</option>
+                        </Field>
+                    </div>
+                </div>
+
+                <div className='box-footer'>
+                    <button type='submit' className='btn btn-primary'
+                    >Cadastrar</button>
+                </div>
+            </form>
         )
     }
 }

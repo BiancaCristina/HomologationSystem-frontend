@@ -6,10 +6,10 @@ import { getList } from './consultaActions'
 function searchingFor(termo) {
     // Verifica se a string em "term" está inclusa dentro do filtro nome
     return function(equipamento) {
-        //return equipamento.nome.toLowerCase().includes(termo.toLowerCase()) || !termo; 
         return equipamento.nome.toLowerCase().includes(termo.toLowerCase()) || 
         equipamento.descricao.toLowerCase().includes(termo.toLowerCase()) || 
         equipamento.fabricante.toLowerCase().includes(termo.toLowerCase()) ||
+        equipamento.r12.toString(10).includes(termo) ||
         !termo; 
     }
 }

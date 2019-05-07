@@ -3,12 +3,24 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import { getList } from './consultaActions'
 
+function searchingFor(termo) {
+    // Verifica se a string em "term" está inclusa dentro do filtro nome
+    return function(equipamento) {
+        return equipamento.nome.toLowerCase().includes(termo.toLowerCase()) || !termo; 
+    }
+}
+
 class ConsultaPaginado extends Component {
 
     constructor(props) {
         super(props)
+
+        // O estado "term" define o filtro de busca
+
         this.state = {
-            equipamentos: []};
+            equipamentos: [],
+            termo: ''};
+        this.handleSearch = this.handleSearch.bind(this);
     }
 
     componentDidMount() {
@@ -20,13 +32,27 @@ class ConsultaPaginado extends Component {
         .then(data => this.setState({equipamentos: data.content}));
     }
 
+    handleSearch(event) {
+        this.setState({termo: event.target.value})
+    }
+
     render() {
         // Pega o estado do componente e usa pra recuperar os dados do backend
-        const {equipamentos} = this.state;
+        const {equipamentos, termo} = this.state;
         equipamentos && console.log(equipamentos)
 
         return (
             <div>
+                <div role='form' className='todoForm'>
+                    <div className='col-xs-12 col-sm-9 col-md-10'>
+                        <input id='description' className='form-control'
+                        placeholder='Pesquise um equipamento'
+                        onChange={this.handleSearch}
+                        value={termo}
+                        ></input>
+                    </div>
+                </div>
+
                 <table className='table'>
                     <thead>
                         <th>R12</th>
@@ -39,7 +65,7 @@ class ConsultaPaginado extends Component {
                     </thead>
 
                     <tbody>
-                        { equipamentos && equipamentos.map(
+                        { equipamentos && equipamentos.filter(searchingFor(termo)).map(
                             item => 
                                 <tr key={item.id} >
                                     <td>{item.r12}</td>

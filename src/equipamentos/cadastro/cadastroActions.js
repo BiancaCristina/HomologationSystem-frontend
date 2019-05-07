@@ -12,6 +12,7 @@ export function create(values) {
                 dispatch([
                     resetForm('CadastroForm')
                 ])
+                
             })
             .catch(e => {
                 toastr.error('Erro', 'Houve problemas para cadastrar equipamento')

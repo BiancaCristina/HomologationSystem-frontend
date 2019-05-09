@@ -24,6 +24,12 @@ class ConsultaPaginado extends Component {
         .then(data => this.setState({equipamentos: data}));
     }
 
+    filterMethod (filter, row, column) {
+        // Metodo da documentação para um filtro que não é case sensitive
+        const id = filter.pivotId || filter.id
+        return row[id] !== undefined ? String(row[id].toLowerCase()).startsWith(filter.value.toLowerCase()) : true
+    }
+
     render() {
         // Cria const pra não usar "this.state" o tempo todo
         const {equipamentos, termo} = this.state;
@@ -58,6 +64,7 @@ class ConsultaPaginado extends Component {
                     defaultPageSize={10}
                     pageSizeOptins = {[3,6]}
                     filterable= {true}
+                    defaultFilterMethod= {this.filterMethod}
                 />
             </div>
         );

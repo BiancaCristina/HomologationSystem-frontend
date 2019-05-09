@@ -8,9 +8,7 @@ class ConsultaPaginado extends Component {
         
         // O estado "termo" define o filtro de busca
         this.state = {
-            equipamentos: [],
-            termo: '',
-            pageOfItems: []
+            equipamentos: []
         };
     }
 
@@ -24,17 +22,25 @@ class ConsultaPaginado extends Component {
         .then(data => this.setState({equipamentos: data}));
     }
 
-    filterMethod (filter, row, column) {
-        // Metodo da documentação para um filtro que não é case sensitive
-        const id = filter.pivotId || filter.id
-        return row[id] !== undefined ? String(row[id].toLowerCase()).startsWith(filter.value.toLowerCase()) : true
-    }
+    filterCaseInsensitive (filter, row) {
+        // Método que filtra os parâmetros da consulta ignorando case sensitive
 
+        const id = filter.pivotId || filter.id;
+        const content = row[id];
+
+        if (typeof content !== 'undefined') {
+            return String(content).toLowerCase().includes(filter.value.toLowerCase());
+        }
+    
+        return true;
+    };
+    
     render() {
         // Cria const pra não usar "this.state" o tempo todo
         const {equipamentos, termo} = this.state;
         equipamentos && console.log(equipamentos)
-
+        
+        // Colunas da tabela
         const columns = [{
                 Header: 'R12',
                 accessor: 'r12'
@@ -64,7 +70,7 @@ class ConsultaPaginado extends Component {
                     defaultPageSize={10}
                     pageSizeOptins = {[3,6]}
                     filterable= {true}
-                    defaultFilterMethod= {this.filterMethod}
+                    defaultFilterMethod= {this.filterCaseInsensitive}
                 />
             </div>
         );

@@ -48,6 +48,8 @@
     "webpack-dev-server": "^1.16.2"
   },
   "dependencies": {
-    "prop-types": "^15.7.2"
+    "prop-types": "^15.7.2",
+    "react-pagination-table": "^2.0.2",
+    "react-table": "^6.10.0"
   }
 }

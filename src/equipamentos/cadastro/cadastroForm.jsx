@@ -21,12 +21,6 @@ class CadastroForm extends Component {
                 <div className='box-body'>
                     <Field name="descricao" component="input" type="textarea" placeholder="Descrição"/>
                 </div>
-               
-{/*                 <div>
-                    <div>
-                        <Field name="descricao" component="textarea" rows="5"/>
-                    </div>
-                </div> */}
 
                 <div>
                     <label></label>

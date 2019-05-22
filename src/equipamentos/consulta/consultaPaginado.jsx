@@ -50,7 +50,7 @@ class ConsultaPaginado extends Component {
         // Colunas da tabela
         const columns = [{
                 Header: 'R12',
-                accessor: 'r12'
+                accessor: 'r12',
             },{
                 Header: 'Nome',
                 accessor: 'nome'
@@ -66,6 +66,27 @@ class ConsultaPaginado extends Component {
             }, {
                 Header: 'Data',
                 accessor: 'dataUltimaEdicao'
+            }, {
+                Header: '',
+                acessor: 'editar',
+                Cell: row => (
+                    <span>
+{/*                         <i className={`fa fa-pencil`}></i>
+                        <i className={`fa fa-trash`}></i>
+                        <i className={`fa fa-link`}></i> */}
+                        <a style={{float : 'left', paddingRight : '25px', color: 'black'}}>
+                            <i className={`fa fa-pencil`}/>
+                        </a>
+
+                        <a style={{float : 'left', paddingRight : '25px', color:'red' }}>
+                            <i className={`fa fa-trash`}/>
+                        </a>
+
+                        <a style={{float : 'left', paddingRight : '25px'}}>
+                            <i className={`fa fa-link`}/>
+                        </a>
+                    </span>
+                  )
             }
         ]
 

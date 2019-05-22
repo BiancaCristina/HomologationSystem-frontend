@@ -13,5 +13,11 @@ export function login(values) {
             },
             data: values
         })
-        .then(response => console.log(response.headers.authorization))  
+        .then(response => {
+            console.log(response.headers.authorization)
+            toastr.success('Login realizado com sucesso!', 'Login realizado!')
+        })
+        .catch(error => {
+            toastr.error('Erro', 'Houve problema ao realizar login com as credenciais utilizadas!')
+        })
 }

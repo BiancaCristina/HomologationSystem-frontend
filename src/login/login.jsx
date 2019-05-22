@@ -14,7 +14,7 @@ import {login} from './loginActions'
 
 import Form from './loginForm'
 
-class Cadastro extends Component {
+class Login extends Component {
 
 	componentWillMount() {
 		// Faz com que a tab padrão seja a 'tabCreate' de criar equipamentos
@@ -50,4 +50,4 @@ class Cadastro extends Component {
 }
 
 const mapDispatchToProps = dispatch => bindActionCreators({selectTab, showTabs}, dispatch)
-export default connect(null, mapDispatchToProps)(Cadastro)
+export default connect(null, mapDispatchToProps)(Login)

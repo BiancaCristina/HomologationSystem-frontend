@@ -49,6 +49,7 @@
   },
   "dependencies": {
     "prop-types": "^15.7.2",
+    "qs": "^6.7.0",
     "react-pagination-table": "^2.0.2",
     "react-table": "^6.10.0"
   }

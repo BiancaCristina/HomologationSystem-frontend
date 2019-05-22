@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+import qs from 'qs'
+import axios from 'axios';
 
 class ConsultaPaginado extends Component {
     constructor(props) {
@@ -21,7 +23,7 @@ class ConsultaPaginado extends Component {
         .then(response => response.json())
         .then(data => this.setState({equipamentos: data}));
     }
-
+    
     filterCaseInsensitive (filter, row) {
         // Método que filtra os parâmetros da consulta ignorando case sensitive
 

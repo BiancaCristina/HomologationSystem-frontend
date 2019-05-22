@@ -7,11 +7,11 @@ class LoginForm extends Component {
         return (    
             <form role='form' onSubmit= {handleSubmit}>
                 <div className='box-body'>
-                    <Field name="usuario" component="input" type="text" placeholder="Usuário"/>
+                    <Field name="acesso" component="input" type="text" placeholder="Usuário"/>
                 </div>
 
                 <div className='box-body'>
-                    <Field name="senha" component="input" type="text" placeholder="Senha"/>
+                    <Field name="senha" component="input" type="password" placeholder="Senha"/>
                 </div>
 
                 <div className='box-footer'>

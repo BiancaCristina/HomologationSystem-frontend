@@ -10,6 +10,7 @@ import TabsContent from '../common/tab/tabsContent'
 import TabHeader from '../common/tab/tabHeader'
 import TabContent from '../common/tab/tabContent'
 import { selectTab, showTabs } from '../common/tab/tabActions'
+import {login} from './loginActions'
 
 import Form from './loginForm'
 
@@ -37,7 +38,7 @@ class Cadastro extends Component {
 
 					<TabsContent>
 						<TabContent id='tabLogin'>
-							<Form />
+							<Form onSubmit= {login}/>
 						</TabContent>
 					</TabsContent>
 				</Tabs>

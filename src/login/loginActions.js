@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
-import { reset as resetForm } from 'redux-form'
+import {setToken} from '../common/auth/auth'
 
 const BASE_URL = 'http://localhost:8080/login'
+const TOKEN_KEY = "SequenciaAssinarToken"
 
 export function login(values) {
     return axios({
@@ -14,8 +15,13 @@ export function login(values) {
             data: values
         })
         .then(response => {
-            console.log(response.headers.authorization)
-            toastr.success('Login realizado com sucesso!', 'Login realizado!')
+            //console.log(response.headers.authorization)
+            //setToken(response.headers.authorization)
+            //localStorage.setItem(TOKEN_KEY, response.headers.authorization);
+            
+            setToken(response.headers.authorization)
+            console.log(localStorage.getItem(TOKEN_KEY))
+            toastr.success('Login realizado com sucesso!')
         })
         .catch(error => {
             toastr.error('Erro', 'Houve problema ao realizar login com as credenciais utilizadas!')

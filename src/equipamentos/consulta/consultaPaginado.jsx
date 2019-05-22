@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import qs from 'qs'
-import axios from 'axios';
+import {getToken} from '../../common/auth/auth'
 
 class ConsultaPaginado extends Component {
     constructor(props) {
@@ -15,11 +14,17 @@ class ConsultaPaginado extends Component {
     }
 
     componentWillMount() {
-        // Faz um GET no endpoint que retorna os equipamentos paginados
+        // Faz um GET no endpoint que retorna os equipamentos paginados usando o token JWT salvo
         // Troquei o equipamentos/page por equipamentos/ (não vem paginado do spring)
         const BASE_URL = 'http://localhost:8080/equipamentos'
-
-        fetch(`${BASE_URL}/`)
+        const TOKEN_KEY = "SequenciaAssinarToken"
+        
+        fetch(`${BASE_URL}/`, {
+            method: 'get',
+            headers: {
+                'Authorization': getToken()
+            }
+        })
         .then(response => response.json())
         .then(data => this.setState({equipamentos: data}));
     }

@@ -1,17 +1,45 @@
-import React from 'react'
+import React, {Component} from 'react'
 import MenuItem from './menuItem'
 import MenuTree from './menuTree'
+import {isAuthenticated} from '../auth/auth'
 
-export default props => (
-  <ul className='sidebar-menu'>
-    <MenuItem path='#' label='Login' icon='user' />
+class Menu extends Component {
+	renderAcesso() {
+		if(!isAuthenticated()) {
+			return <MenuItem path='#' label='Login' icon='sign-in' />
+		}
 
-    <MenuTree label='Equipamentos' icon='wrench'>
-      <MenuItem path='#consultar'
-        label='Consulta' icon='book' />
-      <MenuItem path='#cadastrar'
-        label='Cadastro' icon='edit' />
-    </MenuTree>
+		else {
+			return <MenuItem path='#' label='Logout' icon='sign-out' />
+		}
+	}
 
-  </ul>
-)
+	renderCadastro() {
+		if(isAuthenticated()) {
+			return <MenuItem path='#cadastrar' label='Cadastro' icon='edit' />
+		}
+	}
+
+	renderConsultar() {
+		return <MenuItem path='#consultar'
+				label='Consulta' icon='book' />
+	}
+
+	render() {
+		return(
+			<ul className='sidebar-menu'>
+				
+				<MenuTree label='Acesso' icon='user'>
+					{this.renderAcesso()}
+				</MenuTree>
+
+				<MenuTree label='Equipamentos' icon='wrench'>
+					{this.renderConsultar()}
+					{this.renderCadastro()}
+				</MenuTree>
+		  </ul>
+		)
+	}
+}
+
+export default Menu;

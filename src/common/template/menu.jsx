@@ -10,7 +10,7 @@ class Menu extends Component {
 		}
 
 		else {
-			return <MenuItem path='#' label='Logout' icon='sign-out' />
+			return <MenuItem path='#logout' label='Logout' icon='sign-out' />
 		}
 	}
 

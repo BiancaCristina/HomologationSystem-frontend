@@ -173,6 +173,7 @@ class ConsultaPaginado extends Component {
     }
     render() {
         const {equipamentos} = this.state;
+
         // Colunas da tabela
         const columns = [{
                 Header: 'R12',

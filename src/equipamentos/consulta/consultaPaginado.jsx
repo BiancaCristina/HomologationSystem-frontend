@@ -13,10 +13,12 @@ class ConsultaPaginado extends Component {
         
         // O estado "termo" define o filtro de busca
         this.state = {
-            equipamentos: []
+            equipamentos: [],
+            columns: []
         };
 
         this.renderEditable = this.renderEditable.bind(this);
+        this.renderColunas = this.renderColunas.bind(this);
     }
 
     componentWillMount() {
@@ -30,6 +32,8 @@ class ConsultaPaginado extends Component {
         })
         .then(response => response.json())
         .then(data => this.setState({equipamentos: data}));
+
+        this.renderColunas();
     }
     
     filterCaseInsensitive (filter, row) {
@@ -171,11 +175,10 @@ class ConsultaPaginado extends Component {
             );
         }
     }
-    render() {
-        const {equipamentos} = this.state;
 
-        // Colunas da tabela
-        const columns = [{
+    renderColunas() {
+        if (isAuthenticated()) {
+            const colunas = [{
                 Header: 'R12',
                 accessor: 'r12',
                 Cell: row => (this.renderEditable(row))
@@ -205,14 +208,50 @@ class ConsultaPaginado extends Component {
                 Cell: row => (
                         this.renderOptins(row)
                   )
-            }
-        ]
+            }]
 
+            this.setState({columns: colunas})
+        }
+
+        else {
+            const colunas = [{
+                Header: 'R12',
+                accessor: 'r12',
+                Cell: row => (this.renderEditable(row))
+            },{
+                Header: 'Nome',
+                accessor: 'nome',
+                Cell: row => (this.renderEditable(row))
+            },{
+                Header: 'Fabricante',
+                accessor: 'fabricante',
+                Cell: row => (this.renderEditable(row))
+            }, {
+                Header: 'Descrição',
+                accessor: 'descricao',
+                Cell: row => (this.renderEditable(row))
+            },{
+                Header: 'Status',
+                accessor: 'status',
+                Cell: row => (this.renderEditable(row))
+            }, {
+                Header: 'Data',
+                accessor: 'dataUltimaEdicao',
+                Cell: row => (this.renderEditable(row))
+            }]
+
+            this.setState({columns: colunas})
+        }
+            
+    
+    }
+
+    render() {
         return(
             <div>
                 <ReactTable 
-                    data={equipamentos}
-                    columns={columns}
+                    data={this.state.equipamentos}
+                    columns={this.state.columns}
                     defaultPageSize={10}
                     pageSizeOptins = {[3,6]}
                     filterable= {true}

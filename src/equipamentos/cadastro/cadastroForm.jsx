@@ -22,6 +22,10 @@ class CadastroForm extends Component {
                     <Field name="descricao" component="input" type="textarea" placeholder="Descrição"/>
                 </div>
 
+                <div className='box-body'>
+                    <Field name="linkImagem" component="input" type="textarea" placeholder="Link da imagem"/>
+                </div>
+
                 <div>
                     <label></label>
                     <div>

@@ -118,71 +118,86 @@ class ConsultaPaginado extends Component {
     }
 
     renderEditable(cellInfo) {
-        return (
-            <div
-            contentEditable
-            suppressContentEditableWarning
-            onBlur={e => {
-                const data = [...this.state.equipamentos];
-                data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-                data[cellInfo.index].full = data[cellInfo.index].age * 2;
-                e.target.innerHTML = this.state.equipamentos[cellInfo.index][cellInfo.column.id];
-                this.setState({ data });
+        if (isAuthenticated()) {
+            return (
+                <div
+                contentEditable
+                suppressContentEditableWarning
+                onBlur={e => {
+                    const data = [...this.state.equipamentos];
+                    data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+                    data[cellInfo.index].full = data[cellInfo.index].age * 2;
+                    e.target.innerHTML = this.state.equipamentos[cellInfo.index][cellInfo.column.id];
+                    this.setState({ data });
 
-                // Atualiza as mudanças no backend
-                var id = data[cellInfo.index].id
-                var url_base = 'http://localhost:8080/equipamentos/' + id;
+                    // Atualiza as mudanças no backend
+                    var id = data[cellInfo.index].id
+                    var url_base = 'http://localhost:8080/equipamentos/' + id;
 
-                axios({
-                    method: 'put',
-                    url: url_base,
-                    headers: {
-                    'Access-Control-Allow-Origin': '*',
-                    'Authorization': getToken()
-                    },
-                    data: {
-                        "id": data[cellInfo.index].id,
-                        "r12": data[cellInfo.index].r12,
-                        "nome": data[cellInfo.index].nome,
-                        "fabricante": data[cellInfo.index].fabricante,
-                        "descricao": data[cellInfo.index].descricao,
-                        "status": data[cellInfo.index].status
-                    }
-                })
-                .then(res => {
-                    toastr.success("Equipamento atualizado com sucesso!")
-                })
-                .catch(err => {
-                    toastr.error('Não foi possível atualizar esse equipamento!')
-                })
+                    axios({
+                        method: 'put',
+                        url: url_base,
+                        headers: {
+                        'Access-Control-Allow-Origin': '*',
+                        'Authorization': getToken()
+                        },
+                        data: {
+                            "id": data[cellInfo.index].id,
+                            "r12": data[cellInfo.index].r12,
+                            "nome": data[cellInfo.index].nome,
+                            "fabricante": data[cellInfo.index].fabricante,
+                            "descricao": data[cellInfo.index].descricao,
+                            "status": data[cellInfo.index].status
+                        }
+                    })
+                    .then(res => {
+                        toastr.success("Equipamento atualizado com sucesso!")
+                    })
+                    .catch(err => {
+                        toastr.error('Não foi possível atualizar esse equipamento!')
+                    })
 
 
-            }}
-            >{this.state.equipamentos[cellInfo.index][cellInfo.column.id]}</div>
-        );
+                }}
+                >{this.state.equipamentos[cellInfo.index][cellInfo.column.id]}</div>
+            );
+        }
+
+        else {
+            return (
+                <div
+                >
+                {this.state.equipamentos[cellInfo.index][cellInfo.column.id]}</div>
+            );
+        }
     }
     render() {
         const {equipamentos} = this.state;
-
         // Colunas da tabela
         const columns = [{
                 Header: 'R12',
-                accessor: 'r12'
+                accessor: 'r12',
+                Cell: row => (this.renderEditable(row))
             },{
                 Header: 'Nome',
-                accessor: 'nome'
+                accessor: 'nome',
+                Cell: row => (this.renderEditable(row))
             },{
                 Header: 'Fabricante',
-                accessor: 'fabricante'
+                accessor: 'fabricante',
+                Cell: row => (this.renderEditable(row))
             }, {
                 Header: 'Descrição',
-                accessor: 'descricao'
+                accessor: 'descricao',
+                Cell: row => (this.renderEditable(row))
             },{
                 Header: 'Status',
-                accessor: 'status'
+                accessor: 'status',
+                Cell: row => (this.renderEditable(row))
             }, {
                 Header: 'Data',
-                accessor: 'dataUltimaEdicao'
+                accessor: 'dataUltimaEdicao',
+                Cell: row => (this.renderEditable(row))
             }, {
                 Header: '',
                 acessor: 'linkImagem',

@@ -6,7 +6,7 @@ import {isAuthenticated} from '../auth/auth'
 class Menu extends Component {
 	renderAcesso() {
 		if(!isAuthenticated()) {
-			return <MenuItem path='#' label='Login' icon='sign-in' />
+			return <MenuItem path='#login' label='Login' icon='sign-in' />
 		}
 
 		else {

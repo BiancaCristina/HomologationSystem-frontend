@@ -7,7 +7,8 @@ import Logout from '../logout/logout'
 
 export default props => (
     <Router history={hashHistory}>
-        <Route path='/' component={Login} />
+        <Route path='/' component={Consulta} />
+        <Route path='/login' component={Login} />
         <Route path='/consultar' component={Consulta} />
         <Route path='/cadastrar' component={Cadastro} />
         <Route path='logout' component={Logout} />

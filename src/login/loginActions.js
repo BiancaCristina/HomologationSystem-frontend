@@ -3,7 +3,6 @@ import { toastr } from 'react-redux-toastr'
 import {setToken} from '../common/auth/auth'
 
 const BASE_URL = 'http://localhost:8080/login'
-const TOKEN_KEY = "SequenciaAssinarToken"
 
 export function login(values) {
     return axios({
@@ -14,13 +13,8 @@ export function login(values) {
             },
             data: values
         })
-        .then(response => {
-            //console.log(response.headers.authorization)
-            //setToken(response.headers.authorization)
-            //localStorage.setItem(TOKEN_KEY, response.headers.authorization);
-            
+        .then(response => {            
             setToken(response.headers.authorization)
-            console.log(localStorage.getItem(TOKEN_KEY))
             toastr.success('Login realizado com sucesso!')
         })
         .catch(error => {

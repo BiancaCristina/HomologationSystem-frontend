@@ -1,7 +1,11 @@
 import React, {Component} from 'react'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import {getToken} from '../../common/auth/auth'
+import {getToken, logout, isAuthenticated} from '../../common/auth/auth'
+import axios from 'axios'
+import { toastr } from 'react-redux-toastr'
+
+const BASE_URL = 'http://localhost:8080/equipamentos'
 
 class ConsultaPaginado extends Component {
     constructor(props) {
@@ -16,7 +20,6 @@ class ConsultaPaginado extends Component {
     componentWillMount() {
         // Faz um GET no endpoint que retorna os equipamentos paginados usando o token JWT salvo
         // Troquei o equipamentos/page por equipamentos/ (não vem paginado do spring)
-        const BASE_URL = 'http://localhost:8080/equipamentos'
         const TOKEN_KEY = "SequenciaAssinarToken"
         
         fetch(`${BASE_URL}/`, {
@@ -41,13 +44,74 @@ class ConsultaPaginado extends Component {
     
         return true;
     };
+
+    handleEdit(row) {
+        console.log(row)
+    }
     
+    handleDelete(row) {
+        // Envia requisição para deletar uma coluna
+        var id = row.id
+        var url_base = 'http://localhost:8080/equipamentos/' + id;
+
+        axios({
+             method: 'delete',
+             url: url_base,
+             headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': getToken()
+             }   
+            })
+            .then(res => {
+                window.location.reload()
+                
+            })
+            .catch(err => {
+                toastr.error('Não foi possível remover esse equipamento!')
+            })   
+    }
+
+    handleLink(row) {
+        // Abre o link da imagem do equipamento em uma nova aba
+        window.open(row.linkImagem, "_blank")
+    }
+
+    renderOptins(row) {
+        if (isAuthenticated()) {
+            return (
+                <span>
+                    <a style={{float : 'left', paddingRight : '25px', color: 'black'}}>
+                        <i className={`fa fa-pencil`} onClick={() => this.handleEdit(row.original)}/>
+                    </a>
+        
+                    <a style={{float : 'left', paddingRight : '25px', color:'red' }}>
+                        <i className={`fa fa-trash`} onClick={() => this.handleDelete(row.original)}/>
+                    </a>
+        
+                    <a style={{float : 'left', paddingRight : '25px'}}>
+                        <i className={`fa fa-link`} onClick={() => this.handleLink(row.original)}/>
+                    </a>
+                </span>)
+        }
+
+        else {
+            return(
+                <span>
+                    
+                </span>
+            )
+        }
+
+    }
+
     render() {
         // Cria const pra não usar "this.state" o tempo todo
         const {equipamentos, termo} = this.state;
-        equipamentos && console.log(equipamentos)
-        
+
         // Colunas da tabela
+        if (isAuthenticated()) {
+            
+        }
         const columns = [{
                 Header: 'R12',
                 accessor: 'r12',
@@ -68,24 +132,9 @@ class ConsultaPaginado extends Component {
                 accessor: 'dataUltimaEdicao'
             }, {
                 Header: '',
-                acessor: 'editar',
+                acessor: 'linkImagem',
                 Cell: row => (
-                    <span>
-{/*                         <i className={`fa fa-pencil`}></i>
-                        <i className={`fa fa-trash`}></i>
-                        <i className={`fa fa-link`}></i> */}
-                        <a style={{float : 'left', paddingRight : '25px', color: 'black'}}>
-                            <i className={`fa fa-pencil`}/>
-                        </a>
-
-                        <a style={{float : 'left', paddingRight : '25px', color:'red' }}>
-                            <i className={`fa fa-trash`}/>
-                        </a>
-
-                        <a style={{float : 'left', paddingRight : '25px'}}>
-                            <i className={`fa fa-link`}/>
-                        </a>
-                    </span>
+                        this.renderOptins(row)
                   )
             }
         ]

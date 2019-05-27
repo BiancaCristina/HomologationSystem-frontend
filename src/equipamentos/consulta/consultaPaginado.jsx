@@ -15,13 +15,13 @@ class ConsultaPaginado extends Component {
         this.state = {
             equipamentos: []
         };
+
+        this.renderEditable = this.renderEditable.bind(this);
     }
 
     componentWillMount() {
         // Faz um GET no endpoint que retorna os equipamentos paginados usando o token JWT salvo
-        // Troquei o equipamentos/page por equipamentos/ (não vem paginado do spring)
-        const TOKEN_KEY = "SequenciaAssinarToken"
-        
+        // Troquei o equipamentos/page por equipamentos/ (não vem paginado do spring)        
         fetch(`${BASE_URL}/`, {
             method: 'get',
             headers: {
@@ -45,8 +45,22 @@ class ConsultaPaginado extends Component {
         return true;
     };
 
-    handleEdit(row) {
-        console.log(row)
+    handleEdit(cellInfo) {
+        return (
+            <div
+              style={{ backgroundColor: "#fafafa" }}
+              contentEditable
+              suppressContentEditableWarning
+              onBlur={e => {
+                const data = [...this.state.equipamentos];
+                data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+                this.setState({ data });
+              }}
+              dangerouslySetInnerHTML={{
+                __html: this.state.equipamentos[cellInfo.index][cellInfo.column.id]
+              }}
+            />
+          );
     }
     
     handleDelete(row) {
@@ -81,7 +95,7 @@ class ConsultaPaginado extends Component {
             return (
                 <span>
                     <a style={{float : 'left', paddingRight : '25px', color: 'black'}}>
-                        <i className={`fa fa-pencil`} onClick={() => this.handleEdit(row.original)}/>
+                        <i className={`fa fa-pencil`} onClick={() => this.handleEdit(row)}/>
                     </a>
         
                     <a style={{float : 'left', paddingRight : '25px', color:'red' }}>
@@ -101,20 +115,59 @@ class ConsultaPaginado extends Component {
                 </span>
             )
         }
-
     }
 
+    renderEditable(cellInfo) {
+        return (
+            <div
+            contentEditable
+            suppressContentEditableWarning
+            onBlur={e => {
+                const data = [...this.state.equipamentos];
+                data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+                data[cellInfo.index].full = data[cellInfo.index].age * 2;
+                e.target.innerHTML = this.state.equipamentos[cellInfo.index][cellInfo.column.id];
+                this.setState({ data });
+
+                // Atualiza as mudanças no backend
+                var id = data[cellInfo.index].id
+                var url_base = 'http://localhost:8080/equipamentos/' + id;
+
+                axios({
+                    method: 'put',
+                    url: url_base,
+                    headers: {
+                    'Access-Control-Allow-Origin': '*',
+                    'Authorization': getToken()
+                    },
+                    data: {
+                        "id": data[cellInfo.index].id,
+                        "r12": data[cellInfo.index].r12,
+                        "nome": data[cellInfo.index].nome,
+                        "fabricante": data[cellInfo.index].fabricante,
+                        "descricao": data[cellInfo.index].descricao,
+                        "status": data[cellInfo.index].status
+                    }
+                })
+                .then(res => {
+                    toastr.success("Equipamento atualizado com sucesso!")
+                })
+                .catch(err => {
+                    toastr.error('Não foi possível atualizar esse equipamento!')
+                })
+
+
+            }}
+            >{this.state.equipamentos[cellInfo.index][cellInfo.column.id]}</div>
+        );
+    }
     render() {
-        // Cria const pra não usar "this.state" o tempo todo
-        const {equipamentos, termo} = this.state;
+        const {equipamentos} = this.state;
 
         // Colunas da tabela
-        if (isAuthenticated()) {
-            
-        }
         const columns = [{
                 Header: 'R12',
-                accessor: 'r12',
+                accessor: 'r12'
             },{
                 Header: 'Nome',
                 accessor: 'nome'

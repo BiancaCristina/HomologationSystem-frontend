@@ -16,7 +16,6 @@ export function create(values) {
             })
             .catch(e => {
                 toastr.error('Erro', 'Houve problemas para cadastrar equipamento')
-                //e.response.data.errors.forEach(error => toastr.error('Erro', error))
             })
     }
 }

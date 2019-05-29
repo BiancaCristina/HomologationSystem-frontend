@@ -1,17 +1,13 @@
 import React, {Component} from 'react'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import {getToken, logout, isAuthenticated} from '../../common/auth/auth'
-import axios from 'axios'
-import { toastr } from 'react-redux-toastr'
-
-const BASE_URL = 'http://localhost:8080/equipamentos'
+import {isAuthenticated} from '../../common/auth/auth'
+import {showEquipamentos, deleteEquipamentos, editEquipamentos} from './consultaActions'
 
 class ConsultaPaginado extends Component {
     constructor(props) {
         super(props);
         
-        // O estado "termo" define o filtro de busca
         this.state = {
             equipamentos: [],
             columns: []
@@ -22,15 +18,8 @@ class ConsultaPaginado extends Component {
     }
 
     componentWillMount() {
-        // Faz um GET no endpoint que retorna os equipamentos paginados usando o token JWT salvo
-        // Troquei o equipamentos/page por equipamentos/ (não vem paginado do spring)        
-        fetch(`${BASE_URL}/`, {
-            method: 'get',
-            headers: {
-                'Authorization': getToken()
-            }
-        })
-        .then(response => response.json())
+        // O componente já será renderizado com a lista de equipamentos
+        showEquipamentos()
         .then(data => this.setState({equipamentos: data}));
 
         this.renderColunas();
@@ -49,44 +38,13 @@ class ConsultaPaginado extends Component {
         return true;
     };
 
-    handleEdit(cellInfo) {
-        return (
-            <div
-              style={{ backgroundColor: "#fafafa" }}
-              contentEditable
-              suppressContentEditableWarning
-              onBlur={e => {
-                const data = [...this.state.equipamentos];
-                data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-                this.setState({ data });
-              }}
-              dangerouslySetInnerHTML={{
-                __html: this.state.equipamentos[cellInfo.index][cellInfo.column.id]
-              }}
-            />
-          );
+    handleEditLink(cellInfo) {
+        return;
     }
     
     handleDelete(row) {
-        // Envia requisição para deletar uma coluna
         var id = row.id
-        var url_base = 'http://localhost:8080/equipamentos/' + id;
-
-        axios({
-             method: 'delete',
-             url: url_base,
-             headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Authorization': getToken()
-             }   
-            })
-            .then(res => {
-                window.location.reload()
-                
-            })
-            .catch(err => {
-                toastr.error('Não foi possível remover esse equipamento!')
-            })   
+        deleteEquipamentos(id)
     }
 
     handleLink(row) {
@@ -99,7 +57,7 @@ class ConsultaPaginado extends Component {
             return (
                 <span>
                     <a style={{float : 'left', paddingRight : '25px', color: 'black'}}>
-                        <i className={`fa fa-pencil`} onClick={() => this.handleEdit(row)}/>
+                        <i className={`fa fa-pencil`} onClick={() => this.handleEditLink(row)}/>
                     </a>
         
                     <a style={{float : 'left', paddingRight : '25px', color:'red' }}>
@@ -137,31 +95,7 @@ class ConsultaPaginado extends Component {
                     // Atualiza as mudanças no backend
                     var id = data[cellInfo.index].id
                     var url_base = 'http://localhost:8080/equipamentos/' + id;
-
-                    axios({
-                        method: 'put',
-                        url: url_base,
-                        headers: {
-                        'Access-Control-Allow-Origin': '*',
-                        'Authorization': getToken()
-                        },
-                        data: {
-                            "id": data[cellInfo.index].id,
-                            "r12": data[cellInfo.index].r12,
-                            "nome": data[cellInfo.index].nome,
-                            "fabricante": data[cellInfo.index].fabricante,
-                            "descricao": data[cellInfo.index].descricao,
-                            "status": data[cellInfo.index].status
-                        }
-                    })
-                    .then(res => {
-                        toastr.success("Equipamento atualizado com sucesso!")
-                    })
-                    .catch(err => {
-                        toastr.error('Não foi possível atualizar esse equipamento!')
-                    })
-
-
+                    editEquipamentos(id, data, cellInfo)
                 }}
                 >{this.state.equipamentos[cellInfo.index][cellInfo.column.id]}</div>
             );
@@ -177,73 +111,41 @@ class ConsultaPaginado extends Component {
     }
 
     renderColunas() {
-        if (isAuthenticated()) {
-            const colunas = [{
-                Header: 'R12',
-                accessor: 'r12',
-                Cell: row => (this.renderEditable(row))
-            },{
-                Header: 'Nome',
-                accessor: 'nome',
-                Cell: row => (this.renderEditable(row))
-            },{
-                Header: 'Fabricante',
-                accessor: 'fabricante',
-                Cell: row => (this.renderEditable(row))
-            }, {
-                Header: 'Descrição',
-                accessor: 'descricao',
-                Cell: row => (this.renderEditable(row))
-            },{
-                Header: 'Status',
-                accessor: 'status',
-                Cell: row => (this.renderEditable(row))
-            }, {
-                Header: 'Data',
-                accessor: 'dataUltimaEdicao',
-                Cell: row => (this.renderEditable(row))
-            }, {
-                Header: '',
-                acessor: 'linkImagem',
-                Cell: row => (
-                        this.renderOptins(row)
-                  )
-            }]
+        const colunas = [{
+            Header: 'R12',
+            accessor: 'r12',
+            Cell: row => (this.renderEditable(row))
+        },{
+            Header: 'Nome',
+            accessor: 'nome',
+            Cell: row => (this.renderEditable(row))
+        },{
+            Header: 'Fabricante',
+            accessor: 'fabricante',
+            Cell: row => (this.renderEditable(row))
+        }, {
+            Header: 'Descrição',
+            accessor: 'descricao',
+            Cell: row => (this.renderEditable(row))
+        },{
+            Header: 'Status',
+            accessor: 'status',
+            Cell: row => (this.renderEditable(row))
+        }, {
+            Header: 'Data',
+            accessor: 'dataUltimaEdicao',
+            Cell: row => (this.renderEditable(row))
+        }, {
+            Header: '',
+            acessor: 'editIcons',
+            show: isAuthenticated(),
+            Cell: row => (
+                    this.renderOptins(row)
+            ),
+            filterable: false
+        }]
 
-            this.setState({columns: colunas})
-        }
-
-        else {
-            const colunas = [{
-                Header: 'R12',
-                accessor: 'r12',
-                Cell: row => (this.renderEditable(row))
-            },{
-                Header: 'Nome',
-                accessor: 'nome',
-                Cell: row => (this.renderEditable(row))
-            },{
-                Header: 'Fabricante',
-                accessor: 'fabricante',
-                Cell: row => (this.renderEditable(row))
-            }, {
-                Header: 'Descrição',
-                accessor: 'descricao',
-                Cell: row => (this.renderEditable(row))
-            },{
-                Header: 'Status',
-                accessor: 'status',
-                Cell: row => (this.renderEditable(row))
-            }, {
-                Header: 'Data',
-                accessor: 'dataUltimaEdicao',
-                Cell: row => (this.renderEditable(row))
-            }]
-
-            this.setState({columns: colunas})
-        }
-            
-    
+        this.setState({columns: colunas})
     }
 
     render() {

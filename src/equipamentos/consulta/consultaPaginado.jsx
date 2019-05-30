@@ -4,13 +4,16 @@ import "react-table/react-table.css";
 import {isAuthenticated} from '../../common/auth/auth'
 import {showEquipamentos, deleteEquipamentos, editEquipamentos} from './consultaActions'
 
+const state_link = "STATE_LINK";
+
 class ConsultaPaginado extends Component {
     constructor(props) {
         super(props);
         
         this.state = {
             equipamentos: [],
-            columns: []
+            columns: [],
+            showLinkImagem: localStorage.getItem(state_link)
         };
 
         this.renderEditable = this.renderEditable.bind(this);
@@ -24,7 +27,7 @@ class ConsultaPaginado extends Component {
 
         this.renderColunas();
     }
-    
+
     filterCaseInsensitive (filter, row) {
         // Método que filtra os parâmetros da consulta ignorando case sensitive
 
@@ -38,8 +41,28 @@ class ConsultaPaginado extends Component {
         return true;
     };
 
-    handleEditLink(cellInfo) {
-        return;
+    showLink() {
+        // Verifica se deve mostrar a coluna "linkImagem"
+        if (this.state.showLinkImagem == null || this.state.showLinkImagem == 0) {
+            return false
+        }
+
+        else return true
+    }
+
+    handleEditLink(row) {
+        // Muda o estado que exibe a coluna "linkImagem" e salva no localStorage
+        if (this.state.showLinkImagem == null || this.state.showLinkImagem == 0) {
+            this.setState({showLinkImagem: 1})
+            localStorage.setItem(state_link, 1)
+        }
+
+        else {
+            this.setState({showLinkImagem: 0})
+            localStorage.setItem(state_link, 0)
+        }
+
+        window.location.reload()
     }
     
     handleDelete(row) {
@@ -57,7 +80,7 @@ class ConsultaPaginado extends Component {
             return (
                 <span>
                     <a style={{float : 'left', paddingRight : '25px', color: 'black'}}>
-                        <i className={`fa fa-pencil`} onClick={() => this.handleEditLink(row)}/>
+                        <i className={`fa fa-pencil`} onClick={() => this.handleEditLink(row.original)}/>
                     </a>
         
                     <a style={{float : 'left', paddingRight : '25px', color:'red' }}>
@@ -136,6 +159,13 @@ class ConsultaPaginado extends Component {
             accessor: 'dataUltimaEdicao',
             Cell: row => (this.renderEditable(row))
         }, {
+            Header: 'LinkImagem',
+            accessor: 'linkImagem',
+            show: this.showLink(),
+            Cell: row => (this.renderEditable(row)),
+            filterable: false
+        },
+        {
             Header: '',
             acessor: 'editIcons',
             show: isAuthenticated(),

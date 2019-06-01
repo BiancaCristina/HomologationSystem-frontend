@@ -5,12 +5,12 @@ import {isAuthenticated} from '../auth/auth'
 
 class Menu extends Component {
 	renderAcesso() {
-		if(!isAuthenticated()) {
-			return <MenuItem path='#login' label='Login' icon='sign-in' />
-		}
-
-		else {
-			return <MenuItem path='#logout' label='Logout' icon='sign-out' />
+		if(isAuthenticated()) {
+			return (
+				<MenuTree label='Acesso' icon='user'>
+					<MenuItem path='#logout' label='Logout' icon='sign-out' />
+				</MenuTree>
+			)
 		}
 	}
 
@@ -29,9 +29,7 @@ class Menu extends Component {
 		return(
 			<ul className='sidebar-menu'>
 				
-				<MenuTree label='Acesso' icon='user'>
-					{this.renderAcesso()}
-				</MenuTree>
+				{this.renderAcesso()}
 
 				<MenuTree label='Equipamentos' icon='wrench'>
 					{this.renderConsultar()}

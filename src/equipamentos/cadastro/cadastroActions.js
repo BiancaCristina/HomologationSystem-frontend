@@ -1,21 +1,32 @@
 import axios from 'axios'
 import { toastr } from 'react-redux-toastr'
 import { reset as resetForm } from 'redux-form'
+import {getToken, logout, isAuthenticated} from '../../common/auth/auth'
+import { hashHistory } from 'react-router';
 
 const BASE_URL = 'http://localhost:8080/equipamentos'
 
 export function create(values) {
-    return dispatch => {
-        axios.post(`${BASE_URL}`, values)
-            .then(resp => {
-                toastr.success('Sucesso', 'Equipamento cadastrado')
+    return dispatch => (
+        axios({
+            method: 'post',
+            url: BASE_URL,
+            headers: {
+               'Access-Control-Allow-Origin': '*',
+               'Authorization': getToken()
+            }, 
+            data: values
+           })
+
+           .then(res => {
                 dispatch([
-                    resetForm('CadastroForm')
+                    resetForm('CadastroForm'),
+                    hashHistory.push('/consultar')
                 ])
-                
-            })
-            .catch(e => {
-                toastr.error('Erro', 'Houve problemas para cadastrar equipamento')
-            })
-    }
+               
+           })
+           .catch(err => {
+               toastr.error('Não foi possível remover esse equipamento!')
+           })
+    )
 }

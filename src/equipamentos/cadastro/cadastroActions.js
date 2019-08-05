@@ -26,7 +26,7 @@ export function create(values) {
                
            })
            .catch(err => {
-               toastr.error('Não foi possível remover esse equipamento!')
+               toastr.error('Não foi possível cadastrar esse equipamento!')
            })
     )
 }

@@ -94,9 +94,11 @@ class ConsultaPaginado extends Component {
         }
 
         else {
-            return(
+            return(  
                 <span>
-                    
+                    <a style={{float : 'left', paddingRight : '25px'}}>
+                        <i className={`fa fa-link`} onClick={() => this.handleLink(row.original)}/>
+                    </a>
                 </span>
             )
         }
@@ -168,7 +170,7 @@ class ConsultaPaginado extends Component {
         {
             Header: '',
             acessor: 'editIcons',
-            show: isAuthenticated(),
+            //show: isAuthenticated(),
             Cell: row => (
                     this.renderOptins(row)
             ),
